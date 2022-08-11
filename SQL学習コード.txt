@@ -1,2 +1,126 @@
 SQL学習記録用
 学習し、記述したコードを記述していきます。
+
+select order_id, user_id, quantity 
+from sample.sales
+
+select order_id
+from sample.sales
+
+select order_id, user_id, quantity
+from `sample.sales`
+order by order_id asc
+
+select user_id, order_id, quantity
+from `sample.sales`
+order by user_id asc, order_id desc
+
+select *
+from sample.products
+
+select * except (cost)
+from `sample.products`
+
+select * except (products_id, cost)
+from sample.products
+
+select 100
+, "東京"
+, "2020-01-01"
+from sample.sales
+
+select order_id, revenue * 1.1
+from sample.sales
+
+select (quantity + 2) * 3
+from sample.sales
+
+select order_id
+, revenue
+, quantity
+, revenue / quantity
+from sample.sales 
+order by quantity desc
+
+select order_id
+, revenue
+, quantity
+, revenue / quantity as unit_price
+from sample.sales 
+order by quantity desc
+
+select order_id, revenue as uriage
+from sample.sales
+
+select *
+from `sample.sales`
+limit 5
+
+select order_id, data_time
+from `sample.sales`
+order by data_time desc
+limit 5
+
+select order_id, data_time
+from `sample.sales`
+order by data_time desc
+limit 5 offset 100
+
+select *
+from `sample.customer`
+where gender = 2
+
+select *
+from `sample.customer`
+where gender = 2
+order by register_date desc
+limit 5 
+
+select *
+from `sample.customer`
+where gender = 2 and birthday >= "1999-01-01"
+
+select * 
+from `sample.sales`
+where quantity >= 4 or revenue >= 5000
+
+select *
+from `sample.customer`
+where (gender = 1 or prefecture = "東京") 
+and birthday >= "2000-01-01"
+
+select *
+from `sample.customer`
+where gender = 1 or (prefecture = "東京"
+and birthday >= "2000-01-01")
+
+select *
+from `sample.sales`
+where quantity in (2,4,6)
+
+select *
+from `sample.customer`
+where prefecture in ("青森", "岐阜", "鹿児島")
+
+select * from sample.customer
+where prefecture not in ("東京", "大阪", "愛知")
+
+select *
+from `sample.customer`
+where name like "木%"
+
+select * 
+from `sample.customer`
+where name like "%__子"
+
+select *
+from `sample.customer`
+where birthday between "1999-01-01" and "1999-12-31"
+
+select *
+from `sample.sales`
+where is_proper is true
+
+select *
+from `sample.sales`
+where is_proper is not true
