@@ -187,3 +187,35 @@ from sample.customer
 where birthday <= "1999-12-31"
 group by prefecture
 order by 2 desc
+
+select user_id, product_id, avg(revenue) as avg_revenue
+from sample.sales
+where is_proper is true and prosuct_id in (1,2)
+group by user_id, product_id
+order by avg_revenue desc
+limit 5 
+
+select product_id 
+, stddev_pop(quantity) as stddev_qty
+from sample.sales
+where product_id in (2,3)
+group by product_id
+
+select prefecture
+, count(distinct user_id) as users
+from sample.customer
+group by prefecture
+order by 2 desc
+
+select prefecture, count(distinct user_id) as users
+from sample.customer
+group by prefecture
+having users >= 20
+order by 2 desc
+
+select prefecture, count(distinct usr_id) as users
+from sample.customer
+where gender = 2
+group by prefecture
+having users >= 20
+order by 2 desc
