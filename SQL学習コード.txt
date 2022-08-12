@@ -124,3 +124,66 @@ where is_proper is true
 select *
 from `sample.sales`
 where is_proper is not true
+
+select *
+from sample.customer
+where birthday >= "1999-01-01"
+
+select *
+from sample.customer
+where birthday <= "1998-12-31"
+
+select *
+from sample.customer
+where birthday is null
+
+select *
+from sample.customer
+where register_data in not null
+
+select *
+from sample.customer
+where birthday is null
+
+select *
+from sample.customer
+where register_data in not null
+
+select product_id, sum(qty) as sum_qty
+from sample.small_table
+group by product_id
+
+select user_id, count(*) as orders
+from sample.small_users
+group by user_id
+
+select user_id, count(product_id) as orders
+from sample.small_users
+group by user_id
+
+select user_id, count(distinct) as orders
+from sample.small_users
+group by user_id
+
+select user_id
+, sum(qty) as sum_qty
+, avg(qty) as avg_qty
+, max(qty) as max_qty
+, min(qty) as min_qty
+from sample.small_users
+group by user_id
+
+select count(*) as count_row
+, count(product) as count_product
+, count(distinct) as count_unique_product
+, sum(qty) as sum_qty
+, avg(qty) as avg_qty
+, max(qty) as max_qty
+, min(qty) as min_qty
+from sample.small_users
+
+select prefecture, count(distinct user_id) as users
+from sample.customer
+where birthday <= "1999-12-31"
+group by prefecture
+order by 2 desc
