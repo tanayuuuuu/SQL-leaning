@@ -219,3 +219,88 @@ where gender = 2
 group by prefecture
 having users >= 20
 order by 2 desc
+
+select 
+if (birthday >= "1989-01-01"
+, "平成以降生まれ", "昭和以前生まれ") as era
+, count(dustinct user_id) as users
+from `sample.customer`
+group by era
+
+select 
+if (prefecture = "東京"
+or prefecture = "神奈川"
+or prefecture = "埼玉"
+or prefecture = "千葉", "一都三県", "一都三県以外")　as pref_group
+, count(distinct user_id) as users
+from sample.customer
+group by pref_group
+
+select 
+if (birthday is null, "未登録", "登録済") as birthday_regist
+, count(distinct user_id) as users
+from `sample.customer`
+group by birthday_regist
+
+select 
+case prefecture
+when "東京" then "関東主要都市"
+when "神奈川" then "関東主要都市"
+when "大阪" then "関西主要都県"
+when "兵庫" then "関西主要都県"
+when "京都" then "関西主要都県"
+else "その他"
+end as prefecture_group
+, count(distinct user_id) as users
+from `sample.customer`
+group by prefecture_group
+order by 2 desc
+
+select 
+case"
+when birthday >= "2000-01-01" then "2000年代生まれ"
+when birthday >= "1990-01-01" then "1990年代生まれ"
+when birthday >= "1980-01-01" then "1980年代生まれ"
+else "1970年代以前生まれ"
+end as era_group
+, count(distinct user_id) as users
+from `sample.customer`
+group by era_group
+order by 2 desc
+
+select birthday, count(*) as users
+from `sample.customer`
+where birthday is not null
+group by birthday
+having > 1
+
+select user_id, count(*) as pageviews
+from `sample.web_log`
+where media = "email" and user_id is not null
+group by user_id
+having pageviews >= 10
+
+select prefecture, count(distinct user_id) as users
+from sample.customer
+where is_premium is true
+group by prefecture
+order by 2 desc
+limit 1
+
+select cid, max(session_count) - min(session_count) + 1 as number_of_visits
+from `sample.web_log`
+group by cid
+order by number_of_visits desc
+limit 3
+
+select 
+case 
+when cost >= 0 and cost < 300 then "1.低価格　0-299"
+when cost >= 300 and cost < 600 then "1.低価格　300-599"
+when cost >= 600 and cost < 900 then "1.低価格　600-899"
+when cost >= 900 and cost < 1200 then "1.低価格　900-1200"
+end as cost_range
+, count(distinct product_id) as items
+from sample.produsts
+group by cost_range
+order by 1
