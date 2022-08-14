@@ -304,3 +304,76 @@ end as cost_range
 from sample.produsts
 group by cost_range
 order by 1
+
+select hanbai.product_id, product_name, qty
+from sample.small_sales_1 as hanbai
+inner join sample.small_master as master
+on hanbai.product_id = master.product_id
+
+select product_id, product_name, qty
+from sample.small_sales_1
+inner join sample.small_master
+using (product_id)
+
+select product_id, product_name, qty
+from sample.small_sales_1
+left outer join sample.small_master
+using (product_id)
+
+select * 
+from sample.small_sales_1
+full outer join sample.small_master
+using (product_id)
+
+select *
+from sample.small_sales_2 as jisseki
+inner join sample.small_target as mokuhyou
+on jisseki.year_month = mokuhyou.mouth 
+and jisseki.product_category = mokuhyou.category
+
+select jisseki.year_month
+, jisseki.product_catrgory
+, jisseki.sales
+, mokuhyou.target
+, jisseki.sales / mokuhyou.target as achivement_rate
+from sample.small_sales_2 as jisseki
+join sample.small_target as mokuhyou
+on jisseki.year_month = mokuhyou.year_month
+and jisseki.product_category = mokuhyou.product_catrgory
+order by year_month, product_category
+
+select *
+from sample.small_sales_3
+join sample.small_s_master using (shop_id)
+join sample.small_p_master using (product_id)
+
+select p_master.product_name
+, s_master.shop_name
+, orders.sales
+from sample.small_sales_3 as orders
+join sample.small_s_master as s_master
+on orders.shop_id = s_master.shop_id
+join sample.small_p_master as p_master
+on orders.product_id = p_master.
+
+select orders.product_id
+, area_name
+, shops.shop_name
+, orders.sales
+from sample.small_sales_3 as orders
+join sample.small_s_master as shops
+on orders.shop_id = shops.shop_id
+join sample.small_a_master as areas
+on shops.shop_area_id = areas.shop_area_id
+
+select p_master.product_name
+, s_master.shop_name
+, a_master.area_name
+, orders.sales
+from sample.small_sales_3 as orders
+join sample.small_s_master as s_master
+on orders.shop_id = s_master.shop_id
+join samole.small_a_master as a_master
+on s_master.shop_area_id = a_master.shop_area_id
+join sample.small_p_master as p_master
+on orders.product_id = p_master.product_id
