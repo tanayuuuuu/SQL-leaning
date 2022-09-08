@@ -422,3 +422,62 @@ on jisseki.year_month = mokuhyou.month and
 jisseki.product_category = mokuhyou.category
 order by year_month, product_category
 ・joinはinner joinの略　意味は同じ
+
+select *
+from sample.small_sales_3
+join sample.small_s_master using (shop_id )
+join sample.small_p_master using (product_id)
+
+select orders.product_id 
+, areas.area_name
+, shops.shop_name
+, orders.sales
+from sample.small_sales_3 as orders
+join sample.small_s_masrer as shops
+on orders.shop_id = shops.shop_id
+join sample.small_a_master as areas
+on shops.shop_area_id = areas.shop_area_id
+
+select self1.year as base_year
+, self2.year as next_year
+, self1.qty as base_qty
+, self.2qty as next_qty
+, self2.qty / self1.qty as growth_rate
+from samole.small_year as self2
+on self1.year = self2.year - 1
+
+select self1.year as base_year
+, self2.year as compare_year
+, self1.qty as base_qty
+, self2.qty as compare_qty
+from sample.small_year as self1
+cross join samole.small_year as self2
+・左側テーブルのレコード１行１行に右側テーブルの全レコードを結合する→総当たりでの結合方法
+
+select self1.year as base_year
+, self2.year as compare_year
+, self1.qty as base_qty
+, self2.qty as compare_qty
+from sample.small_year as self1
+cross join samole.small_year as self2
+where salf1.year = 2017
+order by compare_year
+
+select 
+ifnull (registration_year, 2017) as reg_year
+, sun(ltv) as sum_ltv
+from samole.small_ltv
+inner join samole.small_customers using (user_id)
+group by reg_year
+・ifnullはそのレコードがnullの場合に適用する値を任意で設定できる。
+上記の場合はnullの場合2017年と仮定する。
+
+
+
+
+
+
+
+
+
+
