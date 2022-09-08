@@ -377,3 +377,48 @@ join samole.small_a_master as a_master
 on s_master.shop_area_id = a_master.shop_area_id
 join sample.small_p_master as p_master
 on orders.product_id = p_master.product_id
+
+select user_id, product_id, avg(revenue) as avg_revenue
+from sample.sales
+where is_proper is true and product_id in (1,2)
+group by user_id, product_id
+order by avg_revenue desc
+limit 5
+
+select user_id, count(distinct product) as orders
+from sample.small_users
+group by user_id
+
+select product_id, product_name, qty
+from sample.small_sales_1
+left outer join sample.small_master
+using (product_id)
+
+select * from sample.small_sales_1
+full outer join sample.small_master
+using (product_id)
+
+select hanbai.product_id, product_name, qty
+from sample.small_sales1 as hanbai
+inner join sample.small_master as master
+on hanbai.product_id = master.product_id
+・onではなく、usingで共通して持つフィールドの名前が同じであれば使える
+・left,rightは先に読み込むテーブルを全て残し、後に読み込むテーブルは共通して持つフィールドの値が重なっているレコードのみを残す。
+・fullは先に読み込む左、後に読み込む右のすべてのレコードを残すが、相手方のテーブルにないフィールドの値はnullになる。
+
+select * from samole.small_sales_2 as jisseki
+join sample.small_target as mokuhyou
+on jisseki.year_month = mokuhyou.month and 
+jisseki.product_category = mokuhyou.category
+
+select jisseki.year_month
+, jisseki.product_category
+, jisseki.sales
+, mokuhyou.target
+, jisseki.sales / mokuhyou.target as achivement_rate
+from sample.small_sales_2 as jisseki
+join samole.small_target as mokuhyou
+on jisseki.year_month = mokuhyou.month and 
+jisseki.product_category = mokuhyou.category
+order by year_month, product_category
+・joinはinner joinの略　意味は同じ
