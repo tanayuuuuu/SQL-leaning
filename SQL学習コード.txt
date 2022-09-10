@@ -472,6 +472,80 @@ group by reg_year
 ・ifnullはそのレコードがnullの場合に適用する値を任意で設定できる。
 上記の場合はnullの場合2017年と仮定する。
 
+select 
+coalesce (registration_year, first_purchase_year)
+as reg_year
+, sum(ltv) as sum_ltv
+from sample.small_ltv
+inner join sample.small_customers using (user_id)
+group by reg_year
+・coalesce関数はifnullよりもやや高度な置換が可能
+　２つ上のコードはifnullで２０１７年を仮定しているが、それよりも
+初回購入年が適していると判断された場合、coalesce(nullがあるフィールド, 置き換えるフィールド)と記載する。
+
+非等値結合　→　onやusingで左右が等しいものを結合していたが、そうでないものを結合する場合に用いる。
+select self1.order_id
+, self1.product_name
+, self1.product_name2
+from sample.small_order as self1
+inner join sample.small_order as self2
+on 
+self1.order_id = self2.order_id 
+and
+self1.product_name < self2.product_name
+
+・テーブルを横につなぐ　→　join
+・縦につなぐ　→　union(重複しているレコードだけを取得　intersect,差分のレコードだけを取得　except)
+※テーブル1＝ABC
+　テーブル2＝CDE
+　union（和集合） →　ABCCDEが残る　　　　　
+
+※intersect(積集合)　→　Cが残る
+
+※except(差集合)　→　ABが残る　差集合のみ計算式の記述順序によって結果がことなる
+　　　　　　　　　　　　　　　　1-2はABが残るが2-1はDEが残る
+
+union 記述例
+select date, product_name, qty
+from sample.small_jan
+union distinct
+select date, product_name, qty from sample.small_feb
+   ↑↑↑
+※最初と２つ目のselect句で指定するフィールドの種類と数、順序を完全に一致させる必要がある。
+※union distinctは重複を許さず結果テーブルから除く。union allは重複を許し、結果テーブルに残す
+
+select date, product_name, qty from sample.small_jan
+union all 
+select date, product_name, qty from sample.small_feb
+order by 1
+
+・intersectは必ずdistinctと組み合わせて利用する。
+select product_name from sample.small_jan
+intersect distinct
+select product_name from sample.small_feb
+
+・exceptもintersect同様、distinctとのみ組み合わせて利用する。
+select product_name from sample.small_jan
+except distinct 
+select product_name from sample.small_feb
+
+※intersect all  except allという使い方はない！！
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
