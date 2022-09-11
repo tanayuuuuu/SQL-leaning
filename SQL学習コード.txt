@@ -496,9 +496,10 @@ self1.product_name < self2.product_name
 
 ・テーブルを横につなぐ　→　join
 ・縦につなぐ　→　union(重複しているレコードだけを取得　intersect,差分のレコードだけを取得　except)
+
 ※テーブル1＝ABC
 　テーブル2＝CDE
-　union（和集合） →　ABCCDEが残る　　　　　
+　union（和集合（all）） →　ABCCDEが残る　　　　　
 
 ※intersect(積集合)　→　Cが残る
 
@@ -530,6 +531,87 @@ except distinct
 select product_name from sample.small_feb
 
 ※intersect all  except allという使い方はない！！
+
+
+仮想テーブルを対象に実行するSQL文
+1.with句
+2.bigquery上でのビュー
+3.サブクエリ
+上記3つが存在する
+・流れ
+with句で仮想テーブルを作成し、その仮想テーブルがあたかも実在するかのように扱って通常のSQLを記述する。
+
+with句の構文
+with　仮想テーブルの名前　as (
+仮想テーブルを作成するSQL文）
+
+selectフィード名
+from 仮想テーブルの名前
+
+
+記述例
+with jan_feb_sales as (
+select product_name from sample.small_jan
+union distinct
+select product_name from sample.small_feb)
+
+select count(*) as unique_prod_number from jan_feb_sales
+
+・with句ではasに続いてSQL文を記述できる
+・そのSQL文の実行結果に名前を付けられる
+・from句で仮想テーブルを指定し、別のSQLを実行できる
+
+通常のテーブルからの利用例
+
+教本ｐ229
+まず平均値をとる
+select avg(qty) as avg_qty from sample.small_jam
+
+平均販売個数の仮想テーブルを結合する
+with total_avg_qty as (
+select avg(qty) as avg_qty from sample.small_jan)
+
+select * from sample.small_jam
+cross join total_avg_qty
+where qty > avg_qty
+
+・２つの仮想テーブルを作成　例述
+with avg_qty_1 as (
+select avg(qty) as avg_qty_jan
+from sample.small_jan),
+avg_qty_2 as (
+select avg(qty) as avg_qty_feb
+from sample.small_feb)
+
+select * from sample.small_mar
+cross join avg_qty_1
+cross join avg_qty_2
+whrer qty > avg_qtyjan and qty > avg qty_feb
+
+・ビューで仮想テーブルを作成する
+ビューとはSQL文の実行結果を保存したもの。
+　　　　　　　　　　↓
+仮想テーブルを保存したものとも表現できる
+　　　　　　　　　　↓
+with句で作成した仮想テーブルは保存されたものではないため、使い回しができない
+　　　　　　　　　　↓
+ビューはBigquery上に保存されているためあたかも実態があるかのように使いまわせる
+　　　　　　　　　　↓
+しかし、テーブルのように見えても仮想であるため、その本質はSQL文の実行によって生成される結果テーブルである。
+
+※例述
+select count(*)
+from jan_feb_unique_products ←from句でビューを指定したSQL文を実行する
+
+select product_name from sample.small_jan
+union distinct
+select product_name from sample.small_feb ←ビューを作成した元のSQL文が実態のあるテーブルに対して実行される
+
+
+
+
+
+
 
 
 
