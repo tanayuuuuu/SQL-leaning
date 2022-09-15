@@ -703,6 +703,37 @@ group by product_name
 order by 5 desc
 limit 5
 
+サブクエリ
+-クエリとはSQL文のこと（問い合わせ）
+-メインに対するサブ（副）という意味で、副問い合わせとも呼ばれる
+・メインなクエリが必要とする部分的な結果を返すSQL文である
+記述例
+select * from sample.small_jan
+where qty > (select avg(qty) from sample.small_jan)
+                             ↑↑↑
+　　　　　　　　　　　　　かっこの部分がサブクエリ
+※SQL文の中にselect句が複数記述されている場合はサブクエリが使われていると考える。
+１つの値を絞り込む
+レコードを絞り込む
+ex.1　select min_wage from sample.small_wage
+  　　 where pref = "東京", and year = "H29"
+集計関数を使用
+ex.2　select max(min_wage) as max_min_wage
+      from sample.small_wage
+絞り込みと集計関数を併用
+ex.3　select min(min_wage) as min_tokyo_min_wage
+      from sample.small_wage
+      where pref = "東京"
+　　　　　　
+　　　　　　　↓
+　サブクエリの戻り値で新しいフィールドを作成する
+select *
+, (select avg(min_wage) from sample.small_wage)
+as avg_min_wage
+from sample.small_wage 
+※↑↑↑sellect句で新しいフィールドを作成する
+
+
 
 
 
