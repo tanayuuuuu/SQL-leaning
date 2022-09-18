@@ -748,9 +748,37 @@ where min_wage
 ★仮想テーブル＆サブクエリの理解度が低いため、一旦
 動画にてイメージをつかむ。本書を現理解度で進めるのはいったんストップ。
 理解できた後、本書を進めます。
+↓
+以下、動画の内容（かんたんに・わかりやすく）
+クエリの中のクエリ
+SQLを叩いてでた結果に対して、またSQLをたたきたいときに使用する。
+例えば、、、
+とあるテーブルから平均70000円以上の商品を抽出したいとき
+select avg(price)
+from itemsと書いてから↓
 
+select *
+from items
+where price >= 70000;
+と、平均を算出してから抽出するため、2回分けて記述しなければならない。
+が、サブクエリを使用すると
+select *
+from items
+where price >= (select avg(price)
+from items);
+と、記述できる。※先に（）括弧のなかのクエリが実行される。
 
-
+例2
+カテゴリーごとに平均価格以上
+の商品を抽出してください。
+select *
+from items as i1
+where price >= (select avg(price)
+from items as i2
+where i1.category = i2.category
+group by category);
+このような元のテーブルをサブクエリで作成したテーブルが参考にしているものを
+相関サブクエリと呼ぶ。
 
 
 
