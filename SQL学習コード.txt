@@ -733,6 +733,23 @@ as avg_min_wage
 from sample.small_wage 
 ※↑↑↑sellect句で新しいフィールドを作成する
 
+サブクエリの戻り値で演算する
+select *
+, min_wage - (select avg(min_wage) from sample.small_wage)
+as diff_from_table_avg
+from samole.small_wage
+
+サブクエリの戻り値で絞りこむ
+select *
+from sample.small_wage
+where min_wage
+> (select avg(min_wage) from sample.small_wage)
+
+★仮想テーブル＆サブクエリの理解度が低いため、一旦
+動画にてイメージをつかむ。本書を現理解度で進めるのはいったんストップ。
+理解できた後、本書を進めます。
+
+
 
 
 
