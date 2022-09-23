@@ -780,6 +780,44 @@ group by category);
 このような元のテーブルをサブクエリで作成したテーブルが参考にしているものを
 相関サブクエリと呼ぶ。
 
+where句で特定の値を指定する
+select pref, avg(min_wage) as avg_min_wage_by_pref
+from sample.small_wage
+where pref in ("東京", "千葉")
+group by pref
+
+having句で特定の値を指定する
+select pref, avg(min_wage) as avg_min_wage_by_pref
+from sample.small_wage
+group by pref
+having pref in ("東京","千葉")
+※おさらい
+　→havingはgroup byの後ろに記述する
+　→having句では1行目のas句でつけられた名前を利用できる
+　→group byによってグループ化されたレコードに対する取得条件を指定する役割
+
+条件を満たす値のリストを取得する
+select pref
+from sample.small_wage
+where min_wage
+> (select avg(min_wage) from sample.small_wage)
+
+where句にサブクエリを埋め込む
+select pref, avg(min_wage) as avg_min_wage
+from sample.small_wage
+where pref in (select pref from sample.small_wage
+where min_wage
+> (select avg(min_wage) from sample.small_wage))
+group by pref
+
+having句にサブクエリを埋め込む
+select pref, avg(min_wage) as avg_min_wage
+from sample.small_wage
+group by pref
+having pref in (select pref 
+from sample.small_wage
+where min_wage
+>  (select avg(min_wage) from sample.small_wage))
 
 
 
