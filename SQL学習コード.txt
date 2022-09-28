@@ -819,6 +819,24 @@ from sample.small_wage
 where min_wage
 >  (select avg(min_wage) from sample.small_wage))
 
+取得するフィールドと条件を指定する
+select pref, min_wage from sample.small_wage_reiwa1
+where min_wage > 800
+
+from句にサブクエリを埋め込む
+select count(*) as number_of_pref
+, avg(min_wage) as avg_min_wage
+from (
+select pref, min_wage from sanple.small_wage_reiwa1
+where min_wage > 800 
+)
+※サブクエリは入れ子にすることもできる
+※他人が書いたSQLは内側から読みとくのが基本
+※内側のクエリを始めるときはインデントを活用する
+　（絶対的な決まりはない）
+
+
+
 
 
 
